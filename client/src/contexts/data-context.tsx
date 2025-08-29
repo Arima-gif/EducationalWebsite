@@ -95,6 +95,9 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       ...data,
       id: nanoid(),
       createdAt: new Date(),
+      address: data.address || null,
+      phone: data.phone || null,
+      email: data.email || null,
     };
     setOrganizations(prev => [...prev, newOrganization]);
   };
@@ -119,6 +122,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       id: nanoid(),
       createdAt: new Date(),
       lastActive: new Date(),
+      phone: data.phone || null,
+      organizationId: data.organizationId || null,
     };
     setUsers(prev => [...prev, newUser]);
   };
@@ -141,6 +146,9 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       ...data,
       id: nanoid(),
       createdAt: new Date(),
+      description: data.description || null,
+      duration: data.duration || null,
+      maxStudents: data.maxStudents || null,
     };
     setCourses(prev => [...prev, newCourse]);
   };
@@ -163,6 +171,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       ...data,
       id: nanoid(),
       enrollmentDate: new Date(),
+      progress: data.progress || null,
     };
     setEnrollments(prev => [...prev, newEnrollment]);
   };

@@ -168,7 +168,7 @@ export default function UserForm({ open, onOpenChange, userId }: UserFormProps) 
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Organization</FormLabel>
-                    <Select onValueChange={field.onChange} value={field.value}>
+                    <Select onValueChange={field.onChange} value={field.value || ""}>
                       <FormControl>
                         <SelectTrigger data-testid="select-organization">
                           <SelectValue placeholder="Select organization" />
@@ -196,7 +196,7 @@ export default function UserForm({ open, onOpenChange, userId }: UserFormProps) 
                 <FormItem>
                   <FormLabel>Phone</FormLabel>
                   <FormControl>
-                    <Input type="tel" placeholder="Enter phone number" {...field} data-testid="input-phone" />
+                    <Input type="tel" placeholder="Enter phone number" {...field} value={field.value || ""} data-testid="input-phone" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

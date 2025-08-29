@@ -8,7 +8,6 @@ interface SidebarProps {
 
 export default function Sidebar({ activeSection, onSectionChange }: SidebarProps) {
   const navigationItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'organizations', label: 'Organizations', icon: Building },
     { id: 'users', label: 'Users', icon: Users },
     { id: 'courses', label: 'Courses', icon: BookOpen },

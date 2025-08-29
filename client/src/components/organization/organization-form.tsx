@@ -144,7 +144,7 @@ export default function OrganizationForm({ open, onOpenChange, organizationId }:
                 <FormItem>
                   <FormLabel>Address</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Enter organization address" {...field} data-testid="input-address" />
+                    <Textarea placeholder="Enter organization address" {...field} value={field.value || ""} data-testid="input-address" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -159,7 +159,7 @@ export default function OrganizationForm({ open, onOpenChange, organizationId }:
                   <FormItem>
                     <FormLabel>Phone</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter phone number" {...field} data-testid="input-phone" />
+                      <Input placeholder="Enter phone number" {...field} value={field.value || ""} data-testid="input-phone" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -172,7 +172,7 @@ export default function OrganizationForm({ open, onOpenChange, organizationId }:
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input type="email" placeholder="Enter email address" {...field} data-testid="input-email" />
+                      <Input type="email" placeholder="Enter email address" {...field} value={field.value || ""} data-testid="input-email" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

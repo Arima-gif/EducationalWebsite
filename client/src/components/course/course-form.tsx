@@ -122,7 +122,7 @@ export default function CourseForm({ open, onOpenChange, courseId }: CourseFormP
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Enter course description" {...field} data-testid="input-description" />
+                    <Textarea placeholder="Enter course description" {...field} value={field.value || ""} data-testid="input-description" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -204,6 +204,7 @@ export default function CourseForm({ open, onOpenChange, courseId }: CourseFormP
                         min="1"
                         max="52"
                         {...field}
+                        value={field.value || ""}
                         onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : undefined)}
                         data-testid="input-duration"
                       />
@@ -224,6 +225,7 @@ export default function CourseForm({ open, onOpenChange, courseId }: CourseFormP
                         placeholder="Enter max students"
                         min="1"
                         {...field}
+                        value={field.value || ""}
                         onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : undefined)}
                         data-testid="input-max-students"
                       />
