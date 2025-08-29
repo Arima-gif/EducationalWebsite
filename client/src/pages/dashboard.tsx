@@ -5,9 +5,8 @@ import Header from "@/components/layout/header";
 import OrganizationTable from "@/components/organization/organization-table";
 import UserTable from "@/components/user/user-table";
 import CourseGrid from "@/components/course/course-grid";
-import EnrollmentTable from "@/components/enrollment/enrollment-table";
 
-type Section = 'organizations' | 'users' | 'courses' | 'enrollments';
+type Section = 'organizations' | 'users' | 'courses';
 
 interface DashboardProps {
   defaultSection?: Section;
@@ -25,8 +24,6 @@ export default function Dashboard({ defaultSection = 'organizations' }: Dashboar
         return <UserTable searchQuery={searchQuery} />;
       case 'courses':
         return <CourseGrid searchQuery={searchQuery} />;
-      case 'enrollments':
-        return <EnrollmentTable searchQuery={searchQuery} />;
       default:
         return <OrganizationTable searchQuery={searchQuery} />;
     }
@@ -37,7 +34,6 @@ export default function Dashboard({ defaultSection = 'organizations' }: Dashboar
       organizations: 'Organizations',
       users: 'Users',
       courses: 'Courses',
-      enrollments: 'Enrollments',
     };
     return titles[section];
   };

@@ -11,7 +11,6 @@ export default function Sidebar({ activeSection, onSectionChange }: SidebarProps
     { id: 'organizations', label: 'Organizations', icon: Building },
     { id: 'users', label: 'Users', icon: Users },
     { id: 'courses', label: 'Courses', icon: BookOpen },
-    { id: 'enrollments', label: 'Enrollments', icon: University },
   ];
 
   return (
