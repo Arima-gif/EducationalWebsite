@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button";
 import { organizationFormSchema } from "@/lib/validation";
 import type { OrganizationFormData } from "@/types";
+import type { InsertOrganization } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
 
 interface OrganizationFormProps {

@@ -57,26 +57,41 @@ export const enrollments = pgTable('enrollments', {
   progress: integer('progress').default(0),
 });
 
-// Insert schemas
-export const insertOrganizationSchema = createInsertSchema(organizations).omit({
-  id: true,
-  createdAt: true,
+// Insert schemas - simplified approach to avoid compatibility issues
+export const insertOrganizationSchema = z.object({
+  name: z.string(),
+  address: z.string().optional(),
+  phone: z.string().optional(),
+  email: z.string().optional(),
+  managerId: z.string().optional(),
+  status: z.enum(['active', 'inactive']).default('active'),
 });
 
-export const insertUserSchema = createInsertSchema(users).omit({
-  id: true,
-  createdAt: true,
-  lastActive: true,
+export const insertUserSchema = z.object({
+  firstName: z.string(),
+  lastName: z.string(),
+  email: z.string(),
+  phone: z.string().optional(),
+  role: z.enum(['admin', 'manager', 'instructor', 'support', 'student']).default('student'),
+  organizationId: z.string().optional(),
+  status: z.enum(['active', 'inactive']).default('active'),
 });
 
-export const insertCourseSchema = createInsertSchema(courses).omit({
-  id: true,
-  createdAt: true,
+export const insertCourseSchema = z.object({
+  title: z.string(),
+  description: z.string().optional(),
+  instructorId: z.string().optional(),
+  organizationId: z.string().optional(),
+  duration: z.number().optional(),
+  maxStudents: z.number().optional(),
+  status: z.enum(['active', 'inactive', 'draft']).default('draft'),
 });
 
-export const insertEnrollmentSchema = createInsertSchema(enrollments).omit({
-  id: true,
-  enrollmentDate: true,
+export const insertEnrollmentSchema = z.object({
+  studentId: z.string(),
+  courseId: z.string(),
+  status: z.enum(['active', 'completed', 'dropped']).default('active'),
+  progress: z.number().optional(),
 });
 
 // Types

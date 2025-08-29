@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button";
 import { userFormSchema } from "@/lib/validation";
 import type { UserFormData } from "@/types";
+import type { InsertUser } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
 
 interface UserFormProps {

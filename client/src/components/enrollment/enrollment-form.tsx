@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button";
 import { enrollmentFormSchema } from "@/lib/validation";
 import type { EnrollmentFormData } from "@/types";
+import type { InsertEnrollment } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
 
 interface EnrollmentFormProps {

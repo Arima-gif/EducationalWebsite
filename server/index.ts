@@ -21,14 +21,16 @@ async function startServer() {
 
     console.log('📁 Starting Vite development server...');
 
-    // Start Vite frontend server
-    const viteServer = spawn('npx', ['vite', 'dev', '--host', HOST, '--port', FRONTEND_PORT.toString()], {
+    // Start Vite frontend server with custom Replit-compatible config
+    const viteServer = spawn('npx', ['vite', 'dev', '--config', 'vite.replit.config.ts'], {
       cwd: process.cwd(),
       stdio: 'inherit',
       shell: true,
       env: {
         ...process.env,
-        VITE_API_URL: `http://localhost:${API_PORT}`
+        VITE_API_URL: `http://localhost:${API_PORT}`,
+        VITE_HOST: HOST,
+        VITE_PORT: FRONTEND_PORT.toString()
       }
     });
 

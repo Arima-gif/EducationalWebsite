@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button";
 import { courseFormSchema } from "@/lib/validation";
 import type { CourseFormData } from "@/types";
+import type { InsertCourse } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
 
 interface CourseFormProps {
