@@ -7,8 +7,10 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import EnrollmentForm from "./enrollment-form";
 import ConfirmationDialog from "@/components/common/confirmation-dialog";
-import { Plus, Edit, X, Eye, Download } from "lucide-react";
+import { Plus, Edit, X, Eye, Download, FileText, FileSpreadsheet } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { exportToPDF, exportToWord, exportToExcel, exportToCSV } from "@/utils/exportUtils";
 
 interface EnrollmentTableProps {
   searchQuery: string;
@@ -59,8 +61,8 @@ export default function EnrollmentTable({ searchQuery }: EnrollmentTableProps) {
     setEditingEnrollment(null);
   };
 
-  const exportData = () => {
-    const data = filteredEnrollments.map(enrollment => {
+  const prepareExportData = () => {
+    return filteredEnrollments.map(enrollment => {
       const student = users.find(u => u.id === enrollment.studentId);
       const course = courses.find(c => c.id === enrollment.courseId);
       const instructor = course ? users.find(u => u.id === course.instructorId) : null;
@@ -77,26 +79,40 @@ export default function EnrollmentTable({ searchQuery }: EnrollmentTableProps) {
         Progress: `${enrollment.progress || 0}%`,
       };
     });
+  };
 
-    const csv = [
-      Object.keys(data[0] || {}).join(","),
-      ...data.map(row => Object.values(row).map(val => `"${val}"`).join(","))
-    ].join("\n");
+  const handleExport = async (format: 'csv' | 'pdf' | 'word' | 'excel') => {
+    const data = prepareExportData();
+    const title = "Enrollments Report";
+    const filename = `enrollments-${new Date().toISOString().split('T')[0]}`;
 
-    const blob = new Blob([csv], { type: "text/csv" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "enrollments.csv";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    try {
+      switch (format) {
+        case 'csv':
+          exportToCSV(data, filename);
+          break;
+        case 'pdf':
+          exportToPDF(data, title, filename);
+          break;
+        case 'word':
+          await exportToWord(data, title, filename);
+          break;
+        case 'excel':
+          exportToExcel(data, title, filename);
+          break;
+      }
 
-    toast({
-      title: "Export completed",
-      description: "Enrollments data has been exported to CSV.",
-    });
+      toast({
+        title: "Export completed",
+        description: `Enrollments data has been exported to ${format.toUpperCase()}.`,
+      });
+    } catch (error) {
+      toast({
+        title: "Export failed",
+        description: "There was an error exporting the data. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -143,10 +159,32 @@ export default function EnrollmentTable({ searchQuery }: EnrollmentTableProps) {
               </SelectContent>
             </Select>
           </div>
-          <Button variant="secondary" onClick={exportData} data-testid="export-button">
-            <Download className="w-4 h-4 mr-2" />
-            Export
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="secondary" data-testid="export-button">
+                <Download className="w-4 h-4 mr-2" />
+                Export Data
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-40">
+              <DropdownMenuItem onClick={() => handleExport('csv')}>
+                <FileText className="w-4 h-4 mr-2" />
+                Export CSV
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleExport('pdf')}>
+                <FileText className="w-4 h-4 mr-2" />
+                Export PDF
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleExport('word')}>
+                <FileText className="w-4 h-4 mr-2" />
+                Export Word
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleExport('excel')}>
+                <FileSpreadsheet className="w-4 h-4 mr-2" />
+                Export Excel
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </Card>
 
