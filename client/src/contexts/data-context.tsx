@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { nanoid } from "nanoid";
-import type { Organization, User, Course, Enrollment, InsertOrganization, InsertUser, InsertCourse, InsertEnrollment } from "@shared/schema";
+import type { Organization, User, Course, Enrollment, OrganizationFormData, UserFormData, CourseFormData, EnrollmentFormData } from "@/types";
 
 interface DataContextType {
   organizations: Organization[];
@@ -9,22 +9,22 @@ interface DataContextType {
   enrollments: Enrollment[];
   
   // Organization operations
-  createOrganization: (data: InsertOrganization) => void;
+  createOrganization: (data: OrganizationFormData) => void;
   updateOrganization: (id: string, data: Partial<Organization>) => void;
   deleteOrganization: (id: string) => void;
   
   // User operations
-  createUser: (data: InsertUser) => void;
+  createUser: (data: UserFormData) => void;
   updateUser: (id: string, data: Partial<User>) => void;
   deleteUser: (id: string) => void;
   
   // Course operations
-  createCourse: (data: InsertCourse) => void;
+  createCourse: (data: CourseFormData) => void;
   updateCourse: (id: string, data: Partial<Course>) => void;
   deleteCourse: (id: string) => void;
   
   // Enrollment operations
-  createEnrollment: (data: InsertEnrollment) => void;
+  createEnrollment: (data: EnrollmentFormData) => void;
   updateEnrollment: (id: string, data: Partial<Enrollment>) => void;
   deleteEnrollment: (id: string) => void;
   
@@ -60,15 +60,35 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
 
     if (savedOrganizations) {
       setOrganizations(JSON.parse(savedOrganizations));
+    } else {
+      // Load sample data if no saved data exists
+      import("@/data/sampleData").then(({ sampleOrganizations }) => {
+        setOrganizations(sampleOrganizations);
+      });
     }
+
     if (savedUsers) {
       setUsers(JSON.parse(savedUsers));
+    } else {
+      import("@/data/sampleData").then(({ sampleUsers }) => {
+        setUsers(sampleUsers);
+      });
     }
+
     if (savedCourses) {
       setCourses(JSON.parse(savedCourses));
+    } else {
+      import("@/data/sampleData").then(({ sampleCourses }) => {
+        setCourses(sampleCourses);
+      });
     }
+
     if (savedEnrollments) {
       setEnrollments(JSON.parse(savedEnrollments));
+    } else {
+      import("@/data/sampleData").then(({ sampleEnrollments }) => {
+        setEnrollments(sampleEnrollments);
+      });
     }
   }, []);
 
@@ -90,14 +110,14 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   }, [enrollments]);
 
   // Organization operations
-  const createOrganization = (data: InsertOrganization) => {
+  const createOrganization = (data: OrganizationFormData) => {
     const newOrganization: Organization = {
       ...data,
       id: nanoid(),
       createdAt: new Date(),
-      address: data.address || null,
-      phone: data.phone || null,
-      email: data.email || null,
+      address: data.address || undefined,
+      phone: data.phone || undefined,
+      email: data.email || undefined,
     };
     setOrganizations(prev => [...prev, newOrganization]);
   };
@@ -116,14 +136,14 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   };
 
   // User operations
-  const createUser = (data: InsertUser) => {
+  const createUser = (data: UserFormData) => {
     const newUser: User = {
       ...data,
       id: nanoid(),
       createdAt: new Date(),
       lastActive: new Date(),
-      phone: data.phone || null,
-      organizationId: data.organizationId || null,
+      phone: data.phone || undefined,
+      organizationId: data.organizationId || undefined,
     };
     setUsers(prev => [...prev, newUser]);
   };
@@ -141,14 +161,14 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   };
 
   // Course operations
-  const createCourse = (data: InsertCourse) => {
+  const createCourse = (data: CourseFormData) => {
     const newCourse: Course = {
       ...data,
       id: nanoid(),
       createdAt: new Date(),
-      description: data.description || null,
-      duration: data.duration || null,
-      maxStudents: data.maxStudents || null,
+      description: data.description || undefined,
+      duration: data.duration || undefined,
+      maxStudents: data.maxStudents || undefined,
     };
     setCourses(prev => [...prev, newCourse]);
   };
@@ -166,12 +186,12 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   };
 
   // Enrollment operations
-  const createEnrollment = (data: InsertEnrollment) => {
+  const createEnrollment = (data: EnrollmentFormData) => {
     const newEnrollment: Enrollment = {
       ...data,
       id: nanoid(),
       enrollmentDate: new Date(),
-      progress: data.progress || null,
+      progress: data.progress || undefined,
     };
     setEnrollments(prev => [...prev, newEnrollment]);
   };

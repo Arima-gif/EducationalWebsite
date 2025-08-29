@@ -8,7 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { insertOrganizationSchema, type InsertOrganization } from "@shared/schema";
+import { organizationFormSchema } from "@/lib/validation";
+import type { OrganizationFormData } from "@/types";
 import { useToast } from "@/hooks/use-toast";
 
 interface OrganizationFormProps {
@@ -25,8 +26,8 @@ export default function OrganizationForm({ open, onOpenChange, organizationId }:
   const isEditing = !!organizationId;
   const organization = organizationId ? organizations.find(o => o.id === organizationId) : null;
 
-  const form = useForm<InsertOrganization>({
-    resolver: zodResolver(insertOrganizationSchema),
+  const form = useForm<OrganizationFormData>({
+    resolver: zodResolver(organizationFormSchema),
     defaultValues: {
       name: "",
       address: "",

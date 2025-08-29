@@ -7,7 +7,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { insertEnrollmentSchema, type InsertEnrollment } from "@shared/schema";
+import { enrollmentFormSchema } from "@/lib/validation";
+import type { EnrollmentFormData } from "@/types";
 import { useToast } from "@/hooks/use-toast";
 
 interface EnrollmentFormProps {
@@ -24,8 +25,8 @@ export default function EnrollmentForm({ open, onOpenChange, enrollmentId }: Enr
   const isEditing = !!enrollmentId;
   const enrollment = enrollmentId ? enrollments.find(e => e.id === enrollmentId) : null;
 
-  const form = useForm<InsertEnrollment>({
-    resolver: zodResolver(insertEnrollmentSchema),
+  const form = useForm<EnrollmentFormData>({
+    resolver: zodResolver(enrollmentFormSchema),
     defaultValues: {
       studentId: "",
       courseId: "",

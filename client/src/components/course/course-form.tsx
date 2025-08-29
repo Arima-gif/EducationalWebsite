@@ -8,7 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { insertCourseSchema, type InsertCourse } from "@shared/schema";
+import { courseFormSchema } from "@/lib/validation";
+import type { CourseFormData } from "@/types";
 import { useToast } from "@/hooks/use-toast";
 
 interface CourseFormProps {
@@ -25,8 +26,8 @@ export default function CourseForm({ open, onOpenChange, courseId }: CourseFormP
   const isEditing = !!courseId;
   const course = courseId ? courses.find(c => c.id === courseId) : null;
 
-  const form = useForm<InsertCourse>({
-    resolver: zodResolver(insertCourseSchema),
+  const form = useForm<CourseFormData>({
+    resolver: zodResolver(courseFormSchema),
     defaultValues: {
       title: "",
       description: "",

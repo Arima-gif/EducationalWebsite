@@ -7,7 +7,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { insertUserSchema, type InsertUser } from "@shared/schema";
+import { userFormSchema } from "@/lib/validation";
+import type { UserFormData } from "@/types";
 import { useToast } from "@/hooks/use-toast";
 
 interface UserFormProps {
@@ -23,8 +24,8 @@ export default function UserForm({ open, onOpenChange, userId }: UserFormProps) 
   const isEditing = !!userId;
   const user = userId ? users.find(u => u.id === userId) : null;
 
-  const form = useForm<InsertUser>({
-    resolver: zodResolver(insertUserSchema),
+  const form = useForm<UserFormData>({
+    resolver: zodResolver(userFormSchema),
     defaultValues: {
       firstName: "",
       lastName: "",
