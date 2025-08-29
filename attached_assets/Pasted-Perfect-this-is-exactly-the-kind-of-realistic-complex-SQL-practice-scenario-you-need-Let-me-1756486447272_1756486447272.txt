@@ -1,0 +1,94 @@
+Perfect 👍 this is exactly the kind of **realistic, complex SQL practice scenario** you need. Let me build it for you step by step in **detail**.
+
+---
+
+## 🎯 Scenario: **Organization–Course–User Management System**
+
+You are the **Admin** of a platform where multiple organizations are registered.
+Each organization runs **courses**, and those courses are managed by assigned **instructors** and **users** with different roles (Manager, Support Engineer, Instructor, etc.).
+
+---
+
+### 🔹 Entities (Tables You Will Need)
+
+1. **Organizations**
+
+   * Every organization has details like name, address, registration date, etc.
+   * An **organization must have a Manager** (who is also a user in the system).
+
+2. **Users**
+
+   * Users can have roles like `Admin`, `Manager`, `Support Engineer`, `Instructor`, or `Student`.
+   * Users are linked to an **organization** (except the global Admin who manages the system).
+
+3. **Courses**
+
+   * Courses belong to organizations.
+   * A course has details like title, description, duration, and assigned instructor.
+   * Each course can have **many students enrolled**.
+
+4. **Enrollments**
+
+   * Many-to-many relationship between **users (students)** and **courses**.
+   * Keeps track of who is enrolled in which course.
+
+---
+
+### 🔹 Relationships
+
+* One **organization** → Many **users**
+* One **organization** → Many **courses**
+* One **course** → One **instructor** (who is also a user)
+* One **course** → Many **students** (via enrollments)
+* One **organization** → One **manager** (special user role)
+
+---
+
+### 🔹 Sample Data Flow
+
+1. **Admin adds an organization** → while adding, the admin selects an existing user as the **Manager** for that organization.
+   Example: `Org1 = Microsoft`, Manager = `User: John (role=Manager)`
+
+2. **Admin adds users** under organizations → roles may be Manager, Instructor, Support Engineer, Student.
+   Example:
+
+   * User1: Sarah (Instructor, Org1)
+   * User2: Ali (Support Engineer, Org1)
+   * User3: Ahmed (Student, Org1)
+
+3. **Admin adds courses** → while adding a course, admin must select:
+
+   * Which organization this course belongs to
+   * Who is the **Instructor** (must be a user with role `Instructor`)
+
+   Example:
+
+   * Course1: `Database Systems`, Instructor: Sarah (Org1)
+
+4. **Students enroll in courses** → they are linked via the **Enrollments** table.
+   Example:
+
+   * Ahmed (student) → Enrolled in Database Systems
+
+---
+
+### 🔹 Example Queries You Can Practice
+
+Now from this scenario, you can write **complex SQL queries** to practice:
+
+1. Get all organizations and their managers.
+2. Get all courses under a specific organization along with their instructors.
+3. Find all students enrolled in a specific course.
+4. Count how many students are enrolled in each course.
+5. Find all instructors who are teaching more than 2 courses.
+6. Get a list of support engineers in each organization.
+7. Find courses that have no students enrolled.
+8. Update an instructor if a course changes.
+9. Delete an organization and ensure all its users/courses/enrollments are also removed (**ON DELETE CASCADE practice**).
+10. Create a view that shows `Organization → Course → Instructor → Total Students`.
+
+---
+
+👉 This is a **complex but practical admin scenario** where you’ll touch **constraints, foreign keys, indexes, views, subqueries, triggers** while practicing.
+
+Do you want me to now **design the SQL schema (tables + relationships)** for this scenario so you can directly start practicing, or do you want to **first try designing it yourself** and then I’ll review?
