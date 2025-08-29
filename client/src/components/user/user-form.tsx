@@ -31,7 +31,7 @@ export default function UserForm({ open, onOpenChange, userId }: UserFormProps) 
       email: "",
       phone: "",
       role: "student",
-      organizationId: "",
+      organizationId: "none",
       status: "active",
     },
   });
@@ -44,7 +44,7 @@ export default function UserForm({ open, onOpenChange, userId }: UserFormProps) 
         email: user.email,
         phone: user.phone || "",
         role: user.role,
-        organizationId: user.organizationId || "",
+        organizationId: user.organizationId || "none",
         status: user.status,
       });
     } else {
@@ -54,7 +54,7 @@ export default function UserForm({ open, onOpenChange, userId }: UserFormProps) 
         email: "",
         phone: "",
         role: "student",
-        organizationId: "",
+        organizationId: "none",
         status: "active",
       });
     }
@@ -62,14 +62,20 @@ export default function UserForm({ open, onOpenChange, userId }: UserFormProps) 
 
   const onSubmit = (data: InsertUser) => {
     try {
+      // Convert "none" back to empty string for organizationId
+      const processedData = {
+        ...data,
+        organizationId: data.organizationId === "none" ? "" : data.organizationId
+      };
+      
       if (isEditing && userId) {
-        updateUser(userId, data);
+        updateUser(userId, processedData);
         toast({
           title: "User updated",
           description: "The user has been successfully updated.",
         });
       } else {
-        createUser(data);
+        createUser(processedData);
         toast({
           title: "User created",
           description: "The user has been successfully created.",
@@ -168,14 +174,14 @@ export default function UserForm({ open, onOpenChange, userId }: UserFormProps) 
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Organization</FormLabel>
-                    <Select onValueChange={field.onChange} value={field.value || ""}>
+                    <Select onValueChange={field.onChange} value={field.value || "none"}>
                       <FormControl>
                         <SelectTrigger data-testid="select-organization">
                           <SelectValue placeholder="Select organization" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="">No organization</SelectItem>
+                        <SelectItem value="none">No organization</SelectItem>
                         {organizations.map((org) => (
                           <SelectItem key={org.id} value={org.id}>
                             {org.name}
