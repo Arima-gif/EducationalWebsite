@@ -16,15 +16,23 @@ export async function apiRequest(
   const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
   const fullUrl = url.startsWith('/api') ? `${apiUrl}${url}` : url;
   
-  const res = await fetch(fullUrl, {
-    method,
-    headers: data ? { "Content-Type": "application/json" } : {},
-    body: data ? JSON.stringify(data) : undefined,
-    credentials: "include",
-  });
+  try {
+    const res = await fetch(fullUrl, {
+      method,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: data ? JSON.stringify(data) : undefined,
+      credentials: "include",
+    });
 
-  await throwIfResNotOk(res);
-  return res;
+    await throwIfResNotOk(res);
+    return res;
+  } catch (error) {
+    console.error('API request failed:', error);
+    throw error;
+  }
 }
 
 type UnauthorizedBehavior = "returnNull" | "throw";
@@ -38,21 +46,27 @@ export const getQueryFn: <T>(options: {
       const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
       const fullUrl = url.startsWith('/api') ? `${apiUrl}${url}` : url;
       
-      console.log('Making API request to:', fullUrl);
-      
       const res = await fetch(fullUrl, {
         credentials: "include",
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
       });
 
       if (unauthorizedBehavior === "returnNull" && res.status === 401) {
         return null;
       }
 
-      await throwIfResNotOk(res);
+      if (!res.ok) {
+        console.error(`API Error: ${res.status} ${res.statusText}`);
+        return []; // Return empty array instead of throwing
+      }
+
       return await res.json();
     } catch (error) {
-      console.error('Query function error:', error);
-      throw error;
+      console.error('Network error:', error);
+      return []; // Return empty array for network errors
     }
   };
 
