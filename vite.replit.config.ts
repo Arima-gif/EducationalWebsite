@@ -26,6 +26,7 @@ export default defineConfig({
     hmr: {
       host: "0.0.0.0",
       port: 5000,
+      overlay: false,
     },
     fs: {
       strict: false, // Allow access to files outside root

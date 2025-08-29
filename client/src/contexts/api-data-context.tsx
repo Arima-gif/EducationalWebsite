@@ -53,20 +53,28 @@ export function ApiDataProvider({ children }: { children: React.ReactNode }) {
   const queryClient = useQueryClient();
 
   // Fetch all data with React Query
-  const { data: organizations = [] } = useQuery<Organization[]>({
+  const { data: organizations = [], error: orgError } = useQuery<Organization[]>({
     queryKey: ["/api/organizations"],
+    retry: false,
+    throwOnError: false,
   });
 
-  const { data: users = [] } = useQuery<User[]>({
+  const { data: users = [], error: usersError } = useQuery<User[]>({
     queryKey: ["/api/users"],
+    retry: false,
+    throwOnError: false,
   });
 
-  const { data: courses = [] } = useQuery<Course[]>({
+  const { data: courses = [], error: coursesError } = useQuery<Course[]>({
     queryKey: ["/api/courses"],
+    retry: false,
+    throwOnError: false,
   });
 
-  const { data: enrollments = [] } = useQuery<Enrollment[]>({
+  const { data: enrollments = [], error: enrollmentsError } = useQuery<Enrollment[]>({
     queryKey: ["/api/enrollments"],
+    retry: false,
+    throwOnError: false,
   });
 
   // Loading state
