@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useData } from "@/contexts/data-context";
+import { useApiData } from "@/contexts/api-data-context";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -19,7 +19,7 @@ interface CourseFormProps {
 }
 
 export default function CourseForm({ open, onOpenChange, courseId }: CourseFormProps) {
-  const { courses, organizations, users, createCourse, updateCourse, getUsersByRole } = useData();
+  const { courses, organizations, users, createCourse, updateCourse, getUsersByRole } = useApiData();
   const { toast } = useToast();
 
   const instructors = getUsersByRole('instructor');

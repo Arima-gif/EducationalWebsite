@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useData } from "@/contexts/data-context";
+import { useApiData } from "@/contexts/api-data-context";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -16,7 +16,7 @@ interface CourseGridProps {
 }
 
 export default function CourseGrid({ searchQuery }: CourseGridProps) {
-  const { courses, users, organizations, deleteCourse, getEnrollmentsByCourse } = useData();
+  const { courses, users, organizations, deleteCourse, getEnrollmentsByCourse } = useApiData();
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingCourse, setEditingCourse] = useState<string | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);

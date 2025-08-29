@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useData } from "@/contexts/data-context";
+// No longer need useData since we're using API data context
 import Sidebar from "@/components/layout/sidebar";
 import Header from "@/components/layout/header";
 import OrganizationTable from "@/components/organization/organization-table";

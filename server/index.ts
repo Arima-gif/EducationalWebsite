@@ -1,36 +1,61 @@
 #!/usr/bin/env tsx
-// Frontend-only redirect script
+// Dual server setup: API backend + Vite frontend
 import { spawn } from 'child_process';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import { createApp } from './app.js';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const rootDir = path.resolve(__dirname, '..');
+const API_PORT = 3001;
+const HOST = '0.0.0.0';
+const FRONTEND_PORT = 5000;
 
-// Start custom development server that handles Replit hosts properly
-const devServer = spawn('node', ['dev-server.js'], {
-  cwd: rootDir,
-  stdio: 'inherit',
-  shell: true
-});
+async function startServer() {
+  try {
+    console.log('🚀 Starting full-stack application...');
+    console.log('📊 Setting up database connection...');
+    console.log('🌐 Starting API server...');
 
-devServer.on('error', (error) => {
-  console.error('Failed to start development server:', error);
-  process.exit(1);
-});
+    // Start API server
+    const app = await createApp();
+    const apiServer = app.listen(API_PORT, () => {
+      console.log(`📡 API server running at http://localhost:${API_PORT}/api`);
+    });
 
-devServer.on('close', (code) => {
-  console.log(`Development server exited with code ${code}`);
-  process.exit(code || 0);
-});
+    console.log('📁 Starting Vite development server...');
 
-// Handle graceful shutdown
-process.on('SIGINT', () => {
-  console.log('\n🛑 Shutting down development server...');
-  devServer.kill('SIGINT');
-});
+    // Start Vite frontend server
+    const viteServer = spawn('npx', ['vite', 'dev', '--host', HOST, '--port', FRONTEND_PORT.toString()], {
+      cwd: process.cwd(),
+      stdio: 'inherit',
+      shell: true,
+      env: {
+        ...process.env,
+        VITE_API_URL: `http://localhost:${API_PORT}`
+      }
+    });
 
-process.on('SIGTERM', () => {
-  console.log('\n🛑 Shutting down development server...');
-  devServer.kill('SIGTERM');
-});
+    console.log(`🎨 Frontend server starting at http://${HOST}:${FRONTEND_PORT}/`);
+
+    // Handle graceful shutdown
+    const shutdown = () => {
+      console.log('\n🛑 Shutting down servers...');
+      viteServer.kill();
+      apiServer.close(() => {
+        console.log('Servers closed');
+        process.exit(0);
+      });
+    };
+
+    process.on('SIGINT', shutdown);
+    process.on('SIGTERM', shutdown);
+
+    viteServer.on('error', (error) => {
+      console.error('Vite server error:', error);
+      process.exit(1);
+    });
+
+  } catch (error) {
+    console.error('❌ Failed to start servers:', error);
+    process.exit(1);
+  }
+}
+
+startServer();

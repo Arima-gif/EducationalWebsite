@@ -12,7 +12,10 @@ export async function apiRequest(
   url: string,
   data?: unknown | undefined,
 ): Promise<Response> {
-  const res = await fetch(url, {
+  const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+  const fullUrl = url.startsWith('/api') ? `${apiUrl}${url}` : url;
+  
+  const res = await fetch(fullUrl, {
     method,
     headers: data ? { "Content-Type": "application/json" } : {},
     body: data ? JSON.stringify(data) : undefined,
@@ -29,7 +32,11 @@ export const getQueryFn: <T>(options: {
 }) => QueryFunction<T> =
   ({ on401: unauthorizedBehavior }) =>
   async ({ queryKey }) => {
-    const res = await fetch(queryKey.join("/") as string, {
+    const url = queryKey.join("/") as string;
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+    const fullUrl = url.startsWith('/api') ? `${apiUrl}${url}` : url;
+    
+    const res = await fetch(fullUrl, {
       credentials: "include",
     });
 

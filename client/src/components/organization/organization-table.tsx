@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useData } from "@/contexts/data-context";
+import { useApiData } from "@/contexts/api-data-context";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -16,7 +16,7 @@ interface OrganizationTableProps {
 }
 
 export default function OrganizationTable({ searchQuery }: OrganizationTableProps) {
-  const { organizations, users, deleteOrganization, getCoursesByOrganization, getUsersByOrganization } = useData();
+  const { organizations, users, deleteOrganization, getCoursesByOrganization, getUsersByOrganization } = useApiData();
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingOrganization, setEditingOrganization] = useState<string | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);

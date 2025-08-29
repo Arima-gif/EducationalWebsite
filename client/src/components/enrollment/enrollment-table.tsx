@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useData } from "@/contexts/data-context";
+import { useApiData } from "@/contexts/api-data-context";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -17,7 +17,7 @@ interface EnrollmentTableProps {
 }
 
 export default function EnrollmentTable({ searchQuery }: EnrollmentTableProps) {
-  const { enrollments, users, courses, organizations, deleteEnrollment } = useData();
+  const { enrollments, users, courses, organizations, deleteEnrollment } = useApiData();
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingEnrollment, setEditingEnrollment] = useState<string | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
