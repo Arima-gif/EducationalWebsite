@@ -10,6 +10,10 @@ const rootDir = path.resolve(__dirname, '..');
 console.log('🚀 Starting frontend-only React application...');
 console.log('📁 Running Vite development server');
 
+// Set environment variables for Replit compatibility
+process.env.VITE_HOST = '0.0.0.0';
+process.env.VITE_PORT = '5000';
+
 // Start Vite development server from root directory
 const vite = spawn('npx', ['vite', 'dev', '--host', '0.0.0.0', '--port', '5000'], {
   cwd: rootDir,
