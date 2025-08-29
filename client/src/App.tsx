@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { queryClient } from "@/lib/queryClient";
 import { ApiDataProvider } from "./contexts/api-data-context";
+import { ErrorBoundary } from "@/components/common/error-boundary";
 import Dashboard from "@/pages/dashboard";
 import NotFound from "@/pages/not-found";
 
@@ -18,14 +19,16 @@ function Router() {
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <ApiDataProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Router />
-        </TooltipProvider>
-      </ApiDataProvider>
-    </QueryClientProvider>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <ApiDataProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Router />
+          </TooltipProvider>
+        </ApiDataProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
   );
 }
 
