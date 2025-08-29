@@ -104,69 +104,78 @@ export default function OrganizationTable({ searchQuery }: OrganizationTableProp
   };
 
   return (
-    <div className="fade-in">
-      <div className="flex justify-between items-center mb-6">
+    <div className="fade-in space-y-6">
+      <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold text-foreground">Organizations</h2>
-          <p className="text-muted-foreground">Manage all organizations in the system</p>
+          <h2 className="text-3xl font-bold gradient-text">Organizations</h2>
+          <p className="text-muted-foreground/80 text-lg mt-1">Manage all organizations in the system</p>
         </div>
-        <Button onClick={() => setIsFormOpen(true)} data-testid="add-organization">
-          <Plus className="w-4 h-4 mr-2" />
+        <Button 
+          onClick={() => setIsFormOpen(true)} 
+          data-testid="add-organization"
+          className="btn-gradient hover:shadow-lg transform transition-all duration-300 hover:scale-105 px-6 py-3 text-base font-medium"
+        >
+          <Plus className="w-5 h-5 mr-2" />
           Add Organization
         </Button>
       </div>
 
       {/* Filters */}
-      <Card className="p-4 mb-6">
-        <div className="flex flex-wrap items-center gap-4">
-          <div className="flex items-center space-x-2">
-            <label className="text-sm font-medium text-foreground">Status:</label>
+      <Card className="glass-card p-6 border-border/30">
+        <div className="flex flex-wrap items-center gap-6">
+          <div className="flex items-center space-x-3">
+            <label className="text-sm font-semibold text-foreground">Status:</label>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-32" data-testid="status-filter">
+              <SelectTrigger className="w-36 input-focus rounded-xl" data-testid="status-filter">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All</SelectItem>
+                <SelectItem value="all">All Status</SelectItem>
                 <SelectItem value="active">Active</SelectItem>
                 <SelectItem value="inactive">Inactive</SelectItem>
               </SelectContent>
             </Select>
           </div>
-          <div className="flex items-center space-x-2">
-            <label className="text-sm font-medium text-foreground">Sort by:</label>
+          <div className="flex items-center space-x-3">
+            <label className="text-sm font-semibold text-foreground">Sort by:</label>
             <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="w-40" data-testid="sort-filter">
+              <SelectTrigger className="w-44 input-focus rounded-xl" data-testid="sort-filter">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="name">Name</SelectItem>
+                <SelectItem value="name">Name A-Z</SelectItem>
                 <SelectItem value="date">Date Created</SelectItem>
                 <SelectItem value="manager">Manager</SelectItem>
               </SelectContent>
             </Select>
           </div>
-          <Button variant="secondary" onClick={exportData} data-testid="export-button">
+          <Button 
+            variant="secondary" 
+            onClick={exportData} 
+            data-testid="export-button"
+            className="rounded-xl hover:shadow-md transition-all duration-300 hover:scale-105 px-5 py-2.5 font-medium"
+          >
             <Download className="w-4 h-4 mr-2" />
-            Export
+            Export CSV
           </Button>
         </div>
       </Card>
 
       {/* Organizations Table */}
-      <Card className="overflow-hidden">
+      <Card className="glass-card overflow-hidden border-border/30">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-secondary/50">
+            <thead className="bg-gradient-to-r from-secondary/80 to-secondary/60 backdrop-blur-sm">
               <tr>
-                <th className="text-left p-4 font-medium text-foreground">Organization</th>
-                <th className="text-left p-4 font-medium text-foreground">Manager</th>
-                <th className="text-left p-4 font-medium text-foreground">Courses</th>
-                <th className="text-left p-4 font-medium text-foreground">Users</th>
-                <th className="text-left p-4 font-medium text-foreground">Status</th>
-                <th className="text-left p-4 font-medium text-foreground">Actions</th>
+                <th className="text-left p-6 font-semibold text-foreground text-sm uppercase tracking-wide">Organization</th>
+                <th className="text-left p-6 font-semibold text-foreground text-sm uppercase tracking-wide">Manager</th>
+                <th className="text-left p-6 font-semibold text-foreground text-sm uppercase tracking-wide">Courses</th>
+                <th className="text-left p-6 font-semibold text-foreground text-sm uppercase tracking-wide">Users</th>
+                <th className="text-left p-6 font-semibold text-foreground text-sm uppercase tracking-wide">Status</th>
+                <th className="text-left p-6 font-semibold text-foreground text-sm uppercase tracking-wide">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border">
+            <tbody className="divide-y divide-border/30">
               {filteredOrganizations.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="p-8 text-center text-muted-foreground">
@@ -180,50 +189,64 @@ export default function OrganizationTable({ searchQuery }: OrganizationTableProp
                   const userCount = getUsersByOrganization(org.id).length;
 
                   return (
-                    <tr key={org.id} className="hover:bg-secondary/30 transition-colors" data-testid={`org-row-${org.id}`}>
-                      <td className="p-4">
-                        <div className="flex items-center space-x-3">
-                          <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-                            <Building className="text-primary-foreground w-5 h-5" />
+                    <tr key={org.id} className="table-row-hover group" data-testid={`org-row-${org.id}`}>
+                      <td className="p-6">
+                        <div className="flex items-center space-x-4">
+                          <div className="w-12 h-12 btn-gradient rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-all duration-300">
+                            <Building className="text-primary-foreground w-6 h-6" />
                           </div>
                           <div>
-                            <p className="font-medium text-foreground">{org.name}</p>
-                            <p className="text-sm text-muted-foreground">{org.address || 'No address'}</p>
+                            <p className="font-semibold text-foreground text-base group-hover:text-primary transition-colors duration-200">{org.name}</p>
+                            <p className="text-sm text-muted-foreground/80">{org.address || 'No address provided'}</p>
                           </div>
                         </div>
                       </td>
-                      <td className="p-4">
+                      <td className="p-6">
                         {manager ? (
-                          <div className="flex items-center space-x-2">
-                            <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                              <span className="text-white text-sm font-medium">
+                          <div className="flex items-center space-x-3">
+                            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-300">
+                              <span className="text-white text-sm font-semibold">
                                 {manager.firstName[0]}{manager.lastName[0]}
                               </span>
                             </div>
-                            <span className="text-foreground">{manager.firstName} {manager.lastName}</span>
+                            <div>
+                              <span className="text-foreground font-medium">{manager.firstName} {manager.lastName}</span>
+                              <p className="text-xs text-muted-foreground/60">Manager</p>
+                            </div>
                           </div>
                         ) : (
-                          <span className="text-muted-foreground">No manager assigned</span>
+                          <span className="text-muted-foreground/70 italic">No manager assigned</span>
                         )}
                       </td>
-                      <td className="p-4">
-                        <span className="text-foreground font-medium">{courseCount}</span>
+                      <td className="p-6">
+                        <div className="flex items-center space-x-2">
+                          <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center">
+                            <span className="text-white text-sm font-bold">{courseCount}</span>
+                          </div>
+                          <span className="text-xs text-muted-foreground/60">courses</span>
+                        </div>
                       </td>
-                      <td className="p-4">
-                        <span className="text-foreground font-medium">{userCount}</span>
+                      <td className="p-6">
+                        <div className="flex items-center space-x-2">
+                          <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center">
+                            <span className="text-white text-sm font-bold">{userCount}</span>
+                          </div>
+                          <span className="text-xs text-muted-foreground/60">users</span>
+                        </div>
                       </td>
-                      <td className="p-4">
-                        <Badge className={`status-${org.status}`}>
+                      <td className="p-6">
+                        <Badge className={`status-${org.status} px-3 py-1.5 rounded-xl font-medium text-xs`}>
                           {org.status}
                         </Badge>
                       </td>
-                      <td className="p-4">
-                        <div className="flex items-center space-x-2">
+                      <td className="p-6">
+                        <div className="flex items-center space-x-1">
                           <Button
                             variant="ghost"
                             size="sm"
                             onClick={() => handleEdit(org.id)}
                             data-testid={`edit-org-${org.id}`}
+                            className="h-9 w-9 rounded-xl hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-blue-950 dark:hover:text-blue-400 transition-all duration-200 hover:scale-105"
                           >
                             <Edit className="w-4 h-4" />
                           </Button>
@@ -231,12 +254,17 @@ export default function OrganizationTable({ searchQuery }: OrganizationTableProp
                             variant="ghost"
                             size="sm"
                             onClick={() => setDeleteConfirm(org.id)}
-                            className="text-destructive hover:text-destructive"
+                            className="h-9 w-9 rounded-xl hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950 dark:hover:text-red-400 transition-all duration-200 hover:scale-105"
                             data-testid={`delete-org-${org.id}`}
                           >
                             <Trash2 className="w-4 h-4" />
                           </Button>
-                          <Button variant="ghost" size="sm" data-testid={`view-org-${org.id}`}>
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            data-testid={`view-org-${org.id}`}
+                            className="h-9 w-9 rounded-xl hover:bg-green-50 hover:text-green-600 dark:hover:bg-green-950 dark:hover:text-green-400 transition-all duration-200 hover:scale-105"
+                          >
                             <Eye className="w-4 h-4" />
                           </Button>
                         </div>

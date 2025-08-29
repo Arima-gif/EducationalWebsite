@@ -93,22 +93,32 @@ export default function UserForm({ open, onOpenChange, userId }: UserFormProps) 
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto" data-testid="user-form">
-        <DialogHeader>
-          <DialogTitle>{isEditing ? "Edit User" : "Add User"}</DialogTitle>
+      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto glass-card border-border/30" data-testid="user-form">
+        <DialogHeader className="pb-6 border-b border-border/30">
+          <DialogTitle className="text-2xl font-bold gradient-text">
+            {isEditing ? "Edit User" : "Add User"}
+          </DialogTitle>
+          <p className="text-muted-foreground/80 text-sm mt-2">
+            {isEditing ? "Update user information and settings" : "Create a new user account with role and organization assignment"}
+          </p>
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 pt-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormField
                 control={form.control}
                 name="firstName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>First Name *</FormLabel>
+                    <FormLabel className="text-sm font-semibold text-foreground">First Name *</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter first name" {...field} data-testid="input-first-name" />
+                      <Input 
+                        placeholder="Enter first name" 
+                        {...field} 
+                        data-testid="input-first-name"
+                        className="input-focus rounded-xl py-3 px-4 text-base border-border/50 bg-background/50 backdrop-blur-sm" 
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -119,9 +129,14 @@ export default function UserForm({ open, onOpenChange, userId }: UserFormProps) 
                 name="lastName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Last Name *</FormLabel>
+                    <FormLabel className="text-sm font-semibold text-foreground">Last Name *</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter last name" {...field} data-testid="input-last-name" />
+                      <Input 
+                        placeholder="Enter last name" 
+                        {...field} 
+                        data-testid="input-last-name"
+                        className="input-focus rounded-xl py-3 px-4 text-base border-border/50 bg-background/50 backdrop-blur-sm"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -134,34 +149,43 @@ export default function UserForm({ open, onOpenChange, userId }: UserFormProps) 
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email *</FormLabel>
+                  <FormLabel className="text-sm font-semibold text-foreground">Email Address *</FormLabel>
                   <FormControl>
-                    <Input type="email" placeholder="Enter email address" {...field} data-testid="input-email" />
+                    <Input 
+                      type="email" 
+                      placeholder="Enter email address" 
+                      {...field} 
+                      data-testid="input-email"
+                      className="input-focus rounded-xl py-3 px-4 text-base border-border/50 bg-background/50 backdrop-blur-sm"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormField
                 control={form.control}
                 name="role"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Role *</FormLabel>
+                    <FormLabel className="text-sm font-semibold text-foreground">User Role *</FormLabel>
                     <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
-                        <SelectTrigger data-testid="select-role">
-                          <SelectValue placeholder="Select role" />
+                        <SelectTrigger 
+                          data-testid="select-role"
+                          className="input-focus rounded-xl py-3 px-4 text-base border-border/50 bg-background/50 backdrop-blur-sm"
+                        >
+                          <SelectValue placeholder="Select user role" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="admin">Admin</SelectItem>
-                        <SelectItem value="manager">Manager</SelectItem>
-                        <SelectItem value="instructor">Instructor</SelectItem>
-                        <SelectItem value="support">Support Engineer</SelectItem>
-                        <SelectItem value="student">Student</SelectItem>
+                        <SelectItem value="admin">🛡️ Administrator</SelectItem>
+                        <SelectItem value="manager">👔 Manager</SelectItem>
+                        <SelectItem value="instructor">🎓 Instructor</SelectItem>
+                        <SelectItem value="support">🔧 Support Engineer</SelectItem>
+                        <SelectItem value="student">👨‍🎓 Student</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -173,18 +197,21 @@ export default function UserForm({ open, onOpenChange, userId }: UserFormProps) 
                 name="organizationId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Organization</FormLabel>
+                    <FormLabel className="text-sm font-semibold text-foreground">Organization</FormLabel>
                     <Select onValueChange={field.onChange} value={field.value || "none"}>
                       <FormControl>
-                        <SelectTrigger data-testid="select-organization">
+                        <SelectTrigger 
+                          data-testid="select-organization"
+                          className="input-focus rounded-xl py-3 px-4 text-base border-border/50 bg-background/50 backdrop-blur-sm"
+                        >
                           <SelectValue placeholder="Select organization" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="none">No organization</SelectItem>
+                        <SelectItem value="none">🏢 No organization</SelectItem>
                         {organizations.map((org) => (
                           <SelectItem key={org.id} value={org.id}>
-                            {org.name}
+                            🏬 {org.name}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -195,48 +222,70 @@ export default function UserForm({ open, onOpenChange, userId }: UserFormProps) 
               />
             </div>
 
-            <FormField
-              control={form.control}
-              name="phone"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Phone</FormLabel>
-                  <FormControl>
-                    <Input type="tel" placeholder="Enter phone number" {...field} value={field.value || ""} data-testid="input-phone" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="status"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Status</FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <FormField
+                control={form.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-semibold text-foreground">Phone Number</FormLabel>
                     <FormControl>
-                      <SelectTrigger data-testid="select-status">
-                        <SelectValue />
-                      </SelectTrigger>
+                      <Input 
+                        type="tel" 
+                        placeholder="Enter phone number" 
+                        {...field} 
+                        value={field.value || ""} 
+                        data-testid="input-phone"
+                        className="input-focus rounded-xl py-3 px-4 text-base border-border/50 bg-background/50 backdrop-blur-sm"
+                      />
                     </FormControl>
-                    <SelectContent>
-                      <SelectItem value="active">Active</SelectItem>
-                      <SelectItem value="inactive">Inactive</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <div className="flex justify-end space-x-3 pt-4">
-              <Button type="button" variant="outline" onClick={() => onOpenChange(false)} data-testid="cancel-button">
+              <FormField
+                control={form.control}
+                name="status"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-semibold text-foreground">Account Status</FormLabel>
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <FormControl>
+                        <SelectTrigger 
+                          data-testid="select-status"
+                          className="input-focus rounded-xl py-3 px-4 text-base border-border/50 bg-background/50 backdrop-blur-sm"
+                        >
+                          <SelectValue placeholder="Select status" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="active">✅ Active</SelectItem>
+                        <SelectItem value="inactive">❌ Inactive</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="flex justify-end space-x-4 pt-8 border-t border-border/30">
+              <Button 
+                type="button" 
+                variant="outline" 
+                onClick={() => onOpenChange(false)} 
+                data-testid="cancel-button"
+                className="px-6 py-3 rounded-xl font-medium text-base hover:bg-accent/50 transition-all duration-200"
+              >
                 Cancel
               </Button>
-              <Button type="submit" data-testid="submit-button">
-                {isEditing ? "Update User" : "Add User"}
+              <Button 
+                type="submit" 
+                data-testid="submit-button"
+                className="btn-gradient px-8 py-3 rounded-xl font-medium text-base hover:shadow-lg transition-all duration-200 hover:scale-105"
+              >
+                {isEditing ? "Update User" : "Create User"}
               </Button>
             </div>
           </form>

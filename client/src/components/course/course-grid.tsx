@@ -118,124 +118,140 @@ export default function CourseGrid({ searchQuery }: CourseGridProps) {
   };
 
   return (
-    <div className="fade-in">
-      <div className="flex justify-between items-center mb-6">
+    <div className="fade-in space-y-6">
+      <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold text-foreground">Courses</h2>
-          <p className="text-muted-foreground">Manage all courses across organizations</p>
+          <h2 className="text-3xl font-bold gradient-text">Courses</h2>
+          <p className="text-muted-foreground/80 text-lg mt-1">Manage all courses across organizations</p>
         </div>
-        <Button onClick={() => setIsFormOpen(true)} data-testid="add-course">
-          <Plus className="w-4 h-4 mr-2" />
+        <Button 
+          onClick={() => setIsFormOpen(true)} 
+          data-testid="add-course"
+          className="btn-gradient hover:shadow-lg transform transition-all duration-300 hover:scale-105 px-6 py-3 text-base font-medium"
+        >
+          <Plus className="w-5 h-5 mr-2" />
           Add Course
         </Button>
       </div>
 
       {/* Filters */}
-      <Card className="p-4 mb-6">
-        <div className="flex flex-wrap items-center gap-4">
-          <div className="flex items-center space-x-2">
-            <label className="text-sm font-medium text-foreground">Organization:</label>
+      <Card className="glass-card p-6 border-border/30">
+        <div className="flex flex-wrap items-center gap-6">
+          <div className="flex items-center space-x-3">
+            <label className="text-sm font-semibold text-foreground">Organization:</label>
             <Select value={organizationFilter} onValueChange={setOrganizationFilter}>
-              <SelectTrigger className="w-48" data-testid="organization-filter">
+              <SelectTrigger className="w-52 input-focus rounded-xl" data-testid="organization-filter">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All</SelectItem>
+                <SelectItem value="all">All Organizations</SelectItem>
                 {organizations.map(org => (
                   <SelectItem key={org.id} value={org.id}>{org.name}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </div>
-          <div className="flex items-center space-x-2">
-            <label className="text-sm font-medium text-foreground">Status:</label>
+          <div className="flex items-center space-x-3">
+            <label className="text-sm font-semibold text-foreground">Status:</label>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-32" data-testid="status-filter">
+              <SelectTrigger className="w-36 input-focus rounded-xl" data-testid="status-filter">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All</SelectItem>
+                <SelectItem value="all">All Status</SelectItem>
                 <SelectItem value="active">Active</SelectItem>
                 <SelectItem value="inactive">Inactive</SelectItem>
                 <SelectItem value="draft">Draft</SelectItem>
               </SelectContent>
             </Select>
           </div>
-          <Button variant="secondary" onClick={exportData} data-testid="export-button">
+          <Button 
+            variant="secondary" 
+            onClick={exportData} 
+            data-testid="export-button"
+            className="rounded-xl hover:shadow-md transition-all duration-300 hover:scale-105 px-5 py-2.5 font-medium"
+          >
             <Download className="w-4 h-4 mr-2" />
-            Export
+            Export CSV
           </Button>
         </div>
       </Card>
 
       {/* Courses Grid */}
       {filteredCourses.length === 0 ? (
-        <Card className="p-8">
-          <div className="text-center text-muted-foreground">
+        <Card className="glass-card p-12 border-border/30">
+          <div className="text-center text-muted-foreground/80 text-lg">
             {searchQuery ? "No courses found matching your search." : "No courses yet. Create your first course to get started."}
           </div>
         </Card>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredCourses.map((course, index) => {
             const instructor = users.find(u => u.id === course.instructorId);
             const organization = organizations.find(o => o.id === course.organizationId);
             const enrollments = getEnrollmentsByCourse(course.id);
 
             return (
-              <Card key={course.id} className="overflow-hidden hover-scale" data-testid={`course-card-${course.id}`}>
-                <div className={`h-48 bg-gradient-to-br ${getCourseGradient(index)} flex items-center justify-center text-white`}>
-                  {getCourseIcon(course.title)}
-                </div>
-                <div className="p-6">
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-lg font-semibold text-foreground truncate">{course.title}</h3>
-                    <Badge className={`status-${course.status}`}>
+              <Card key={course.id} className="glass-card overflow-hidden card-hover border-border/30 group" data-testid={`course-card-${course.id}`}>
+                <div className={`h-52 bg-gradient-to-br ${getCourseGradient(index)} flex items-center justify-center text-white relative overflow-hidden`}>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent group-hover:from-white/20 transition-all duration-300" />
+                  <div className="relative z-10 transform group-hover:scale-110 transition-transform duration-300">
+                    {getCourseIcon(course.title)}
+                  </div>
+                  <div className="absolute top-4 right-4">
+                    <Badge className={`status-${course.status} px-3 py-1.5 rounded-xl font-medium text-xs backdrop-blur-sm`}>
                       {course.status}
                     </Badge>
                   </div>
+                </div>
+                <div className="p-6">
+                  <div className="mb-4">
+                    <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors duration-200 mb-2">{course.title}</h3>
+                    {course.description && (
+                      <p className="text-muted-foreground/80 text-sm line-clamp-2 leading-relaxed">
+                        {course.description}
+                      </p>
+                    )}
+                  </div>
                   
-                  {course.description && (
-                    <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
-                      {course.description}
-                    </p>
-                  )}
-                  
-                  <div className="space-y-2 mb-4">
-                    <div className="flex items-center text-sm">
-                      <span className="text-muted-foreground w-20">Instructor:</span>
-                      <span className="text-foreground font-medium">
-                        {instructor ? `${instructor.firstName} ${instructor.lastName}` : "No instructor"}
+                  <div className="space-y-3 mb-6">
+                    <div className="flex items-center justify-between">
+                      <span className="text-muted-foreground/70 text-sm">Instructor</span>
+                      <span className="text-foreground font-medium text-sm">
+                        {instructor ? `${instructor.firstName} ${instructor.lastName}` : "Not assigned"}
                       </span>
                     </div>
-                    <div className="flex items-center text-sm">
-                      <span className="text-muted-foreground w-20">Organization:</span>
-                      <span className="text-foreground">
-                        {organization?.name || "No organization"}
+                    <div className="flex items-center justify-between">
+                      <span className="text-muted-foreground/70 text-sm">Organization</span>
+                      <span className="text-foreground text-sm truncate max-w-32">
+                        {organization?.name || "Not assigned"}
                       </span>
                     </div>
-                    <div className="flex items-center text-sm">
-                      <span className="text-muted-foreground w-20">Enrolled:</span>
-                      <span className="text-foreground font-medium">
-                        {enrollments.length} student{enrollments.length !== 1 ? 's' : ''}
-                      </span>
+                    <div className="flex items-center justify-between">
+                      <span className="text-muted-foreground/70 text-sm">Students</span>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-6 h-6 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+                          <span className="text-white text-xs font-bold">{enrollments.length}</span>
+                        </div>
+                      </div>
                     </div>
                     {course.duration && (
-                      <div className="flex items-center text-sm">
-                        <span className="text-muted-foreground w-20">Duration:</span>
-                        <span className="text-foreground">{course.duration} weeks</span>
+                      <div className="flex items-center justify-between">
+                        <span className="text-muted-foreground/70 text-sm">Duration</span>
+                        <span className="text-foreground text-sm font-medium">{course.duration} weeks</span>
                       </div>
                     )}
                   </div>
 
-                  <div className="flex items-center justify-between pt-4 border-t border-border">
-                    <div className="flex items-center space-x-2">
+                  <div className="flex items-center justify-between pt-4 border-t border-border/30">
+                    <div className="flex items-center space-x-1">
                       <Button
                         variant="ghost"
                         size="sm"
                         onClick={() => handleEdit(course.id)}
-                        title="Edit"
+                        title="Edit Course"
                         data-testid={`edit-course-${course.id}`}
+                        className="h-9 w-9 rounded-xl hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-blue-950 dark:hover:text-blue-400 transition-all duration-200 hover:scale-105"
                       >
                         <Edit className="w-4 h-4" />
                       </Button>
@@ -244,6 +260,7 @@ export default function CourseGrid({ searchQuery }: CourseGridProps) {
                         size="sm"
                         title="View Enrollments"
                         data-testid={`view-enrollments-${course.id}`}
+                        className="h-9 w-9 rounded-xl hover:bg-green-50 hover:text-green-600 dark:hover:bg-green-950 dark:hover:text-green-400 transition-all duration-200 hover:scale-105"
                       >
                         <Users className="w-4 h-4" />
                       </Button>
@@ -251,14 +268,18 @@ export default function CourseGrid({ searchQuery }: CourseGridProps) {
                         variant="ghost"
                         size="sm"
                         onClick={() => setDeleteConfirm(course.id)}
-                        className="text-destructive hover:text-destructive"
-                        title="Delete"
+                        className="h-9 w-9 rounded-xl hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950 dark:hover:text-red-400 transition-all duration-200 hover:scale-105"
+                        title="Delete Course"
                         data-testid={`delete-course-${course.id}`}
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>
                     </div>
-                    <Button variant="ghost" size="sm" className="text-primary hover:text-primary/80 text-sm font-medium">
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="text-primary hover:text-primary/80 text-sm font-semibold px-4 py-2 rounded-xl hover:bg-primary/10 transition-all duration-200"
+                    >
                       View Details
                     </Button>
                   </div>
