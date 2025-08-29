@@ -22,7 +22,10 @@ export default defineConfig({
   server: {
     host: "0.0.0.0",
     port: 5000,
-    // allowedHosts: "all", // This option doesn't exist in Vite
+    hmr: {
+      host: "0.0.0.0",
+      port: 5000,
+    },
     fs: {
       strict: false, // Allow access to files outside root
       allow: [
