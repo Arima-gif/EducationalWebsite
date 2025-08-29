@@ -2,6 +2,7 @@
 // Custom Vite development server for Replit environment
 
 import { createServer } from 'vite';
+import react from '@vitejs/plugin-react';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -11,6 +12,17 @@ async function startDevServer() {
   try {
     const server = await createServer({
       root: path.resolve(__dirname, 'client'),
+      plugins: [
+        react(),
+        // Disable problematic replit plugins for now
+      ],
+      resolve: {
+        alias: {
+          "@": path.resolve(__dirname, "client", "src"),
+          "@shared": path.resolve(__dirname, "shared"),
+          "@assets": path.resolve(__dirname, "attached_assets"),
+        },
+      },
       server: {
         host: '0.0.0.0',
         port: 5000,
@@ -20,7 +32,11 @@ async function startDevServer() {
           port: 5000
         }
       },
-      configFile: path.resolve(__dirname, 'vite.config.ts')
+      build: {
+        outDir: path.resolve(__dirname, "dist/public"),
+        emptyOutDir: true,
+      },
+      configFile: false // Don't load the main config file to avoid conflicts
     });
 
     await server.listen();
